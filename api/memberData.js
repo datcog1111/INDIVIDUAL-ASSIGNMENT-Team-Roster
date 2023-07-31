@@ -66,7 +66,19 @@ const updateMember = (payload) => new Promise((resolve, reject) => {
     body: JSON.stringify(payload),
   })
     .then((response) => response.json())
-    .then((data) => resolve(data))
+    .then(resolve)
+    .catch(reject);
+});
+
+const getMemberByTeam = (firebaseKey) => new Promise((resolve, reject) => {
+  fetch(`${endpoint}/teams.json?orderBy="team_name"&equalTo="${firebaseKey}"`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => resolve(Object.values(data)))
     .catch(reject);
 });
 
@@ -76,4 +88,5 @@ export {
   getSingleMember,
   deleteMember,
   updateMember,
+  getMemberByTeam,
 };

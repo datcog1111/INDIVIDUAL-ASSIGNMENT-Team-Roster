@@ -18,7 +18,12 @@ a {
 }
 
 body {
-  background-image: url("https://img.freepik.com/premium-vector/aesthetic-cute-orange-checkerboard-checkered-gingham-plaid-tartan-background-illustration-wallpaper_565280-524.jpg")
+  background-image: url("https://t3.ftcdn.net/jpg/03/11/94/06/360_F_311940642_DQejWDRPk5tBUcyeXh4BZmyhOsvEekVi.jpg")
 }
 
-
+.member-card {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 40px;
+  
+}
