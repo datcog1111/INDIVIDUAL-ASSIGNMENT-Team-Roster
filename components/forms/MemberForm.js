@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap';
 import { useAuth } from '../../utils/context/authContext';
 import { createMember, updateMember } from '../../api/memberData';
+import { getTeams } from '../../api/teamData';
 
 const initialState = {
   name: '',
@@ -15,10 +16,12 @@ const initialState = {
 
 function MemberForm({ obj }) {
   const [formInput, setFormInput] = useState(initialState);
+  const [teams, setTeams] = useState([]);
   const router = useRouter();
   const { user } = useAuth();
 
   useEffect(() => {
+    getTeams(user.uid).then(setTeams);
     if (obj.firebaseKey) setFormInput(obj);
   }, [obj, user]);
 
@@ -33,7 +36,7 @@ function MemberForm({ obj }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (obj.firebaseKey) {
-      updateMember(formInput).then(() => router.push('/member}'));
+      updateMember(formInput).then(() => router.push('/team'));
     } else {
       const payload = { ...formInput, uid: user.uid };
       createMember(payload).then(({ name }) => {
@@ -71,6 +74,30 @@ function MemberForm({ obj }) {
         />
       </FloatingLabel>
 
+      <FloatingLabel controlId="floatingSelect" label="Team">
+        <Form.Select
+          aria-label="Team"
+          name="team_name"
+          onChange={handleChange}
+          className="mb-3"
+          value={obj.team_name}
+          required
+        >
+
+          <option value="">Select A Team</option>
+          {
+          teams.map((team) => (
+            <option
+              key={team.firebaseKey}
+              value={team.firebaseKey}
+            >
+              {team.team_name}
+            </option>
+          ))
+        }
+        </Form.Select>
+      </FloatingLabel>
+
       <FloatingLabel controlId="floatingInput3" label="Role" className="mb-3">
         <Form.Control
           as="textarea"
@@ -93,6 +120,7 @@ MemberForm.propTypes = {
     name: PropTypes.string,
     image: PropTypes.string,
     role: PropTypes.string,
+    team_name: PropTypes.string,
     uid: PropTypes.string,
     firebaseKey: PropTypes.string,
   }),
